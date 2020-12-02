@@ -1,0 +1,53 @@
+version: '2.4'
+
+services:
+
+  chrome_headless:
+    image: chrome_headless
+    build: .
+    tty: true
+    container_name: chrome_headless
+    # restart always = if unhealthy re-start the container
+    #restart: always
+
+    # required to access dbus on the host node - yuck!
+    privileged: true
+
+    ports:
+      # outside:inside
+      - 3001:3000
+ 
+    networks:
+      - mysql_network
+ 
+    volumes:
+      - ./src:/app
+      - ./data:/data
+      # FIX: Failed to connect to the bus: Failed to connect to socket /var/run/dbus/system_bus_socket: No such file or directory
+      - /var/run/dbus/system_bus_socket:/var/run/dbus/system_bus_socket
+
+    # run our one-shot here :)
+    command: ./app/run.sh 2>&1
+
+#    healthcheck:
+#      test:
+#        [
+#          "CMD-SHELL",
+#          "/usr/local/bin/healthcheck.sh",
+#        ]
+#      interval: 60s
+#      timeout: 10s
+#      retries: 3
+#      # delay long enough for weewx to gather an update and send to WU 
+#      start_period: 3m
+
+# we have to specify the network subnet as that is what mysql expects the container to connect from
+networks:
+  mysql_network:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: "192.168.86.0/24"
+          gateway: "192.168.86.1"
+

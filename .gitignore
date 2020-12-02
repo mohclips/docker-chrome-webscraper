@@ -1,0 +1,6 @@
+*.pyc
+login_details.py
+*.log
+src/.*
+data/chrome-data
+old/
