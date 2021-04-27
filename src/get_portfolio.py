@@ -15,8 +15,8 @@ from selenium.webdriver.common.alert import Alert
 
 import login_details
 
-#import logging
-#from selenium.webdriver.remote.remote_connection import LOGGER
+import logging
+from selenium.webdriver.remote.remote_connection import LOGGER
 
 import lxml.html # for table parsing - much quicker than selenium (x20)
 import lxml.etree
@@ -108,6 +108,10 @@ def webdriver_setup():
     options.add_argument('--disable-infobars')
     options.add_argument('--disable-extensions')
     options.add_argument('--disable-dev-shm-usage')
+    #
+    #options.add_argument('--no-sandbox')
+    options.add_argument('--remote-debugging-port=9222')
+    #
     #options.add_argument('--no-sandbox')
     #options.add_argument('--disable-setuid-sandbox')
     options.add_argument("--user-agent="+user_agent) # hide headless browser
@@ -120,9 +124,9 @@ def webdriver_setup():
     #
     # set up debug logging if required
     #
-    #LOGGER.setLevel(logging.DEBUG)
-    #logging.basicConfig(level=logging.DEBUG)
-    #logger = logging.getLogger(__name__)
+    LOGGER.setLevel(logging.DEBUG)
+    logging.basicConfig(level=logging.DEBUG)
+    logger = logging.getLogger(__name__)
 
     # initialize the chrome web driver
     driver = webdriver.Chrome(
@@ -366,8 +370,8 @@ DISPLAY = os.getenv('DISPLAY')
 if DISPLAY == None:
     print ("no DISPLAY env var")
     sys.exit(1)
-#else:
-    #print "DISPLAY =", DISPLAY
+else:
+    print("DISPLAY =", DISPLAY)
 
 #
 # the actual work - done in functions so that they can be timed
@@ -398,7 +402,10 @@ else:
 
 # get current displayed data
 cells = rows[2].xpath('.//td/text()')
-#pp.pprint(cells)
+
+# print("cells")
+# pp.pprint(cells)
+# print("cells")
 
 total = cells[3].strip()
 
