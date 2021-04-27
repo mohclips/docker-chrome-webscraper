@@ -11,22 +11,30 @@ def etl():
     # read file - lazy
 
     try:
+        print("read total")
         total = float(open("/data/results.log",'r').read(12).strip())
+        print("read total:",total)
     except Exception as e:
         print(e)
         sys.exit(1)
 
     try:
+        print("read ftse100")
         ftse100 = float(open("/data/ftse100.log",'r').read(12).strip())
+        print("read ftse100:",ftse100)
     except Exception as e:
         print(e)
-        sys.exit(1)
+        #sys.exit(1)
+        ftse100 = -1
 
     try:
+        print("read ftse250")
         ftse250 = float(open("/data/ftse250.log",'r').read(12).strip())
+        print("read ftse250:",ftse250)
     except Exception as e:
         print(e)
-        sys.exit(1)
+        #sys.exit(1)
+        ftse250 = -1
 
     pct=100
 
