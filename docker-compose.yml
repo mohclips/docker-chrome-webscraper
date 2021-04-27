@@ -28,6 +28,8 @@ services:
 
     # run our one-shot here :)
     command: ./app/run.sh 2>&1
+    # use this one to keep the container up and then you can debug
+    #command: tail -f /dev/null
 
 #    healthcheck:
 #      test:
