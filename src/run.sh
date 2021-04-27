@@ -9,9 +9,10 @@ rm -rf /data/*.log /data/chrome-data /data/err_source.html
 rm -rf /app/{.cache,.config,.local,.pki}
 #sleep 2
 
-#echo "DISPLAY=$DISPLAY"
+id -a
+echo "DISPLAY=$DISPLAY"
 
-/usr/bin/xvfb-run -s '-screen 0 1920x1080x24' python -u ./get_portfolio.py 2>&1 > /data/chrome.log
+/usr/bin/xvfb-run -s '-screen 0 1920x1080x24' python -u ./get_portfolio.py 2>&1 | tee /data/chrome.log
 ERR=$?
 # not needed in docker container
 #./cleanup.sh 2>&1 >> /data/chrome.log
@@ -33,11 +34,13 @@ else
     #
     # get FTSE values
     #
+    echo "get_ftse"
     ./get_ftse.sh
 
     #
     # write to mysql
     #
+    echo "send_to_mysql"
     ./send_to_mysql.py
 
 fi
